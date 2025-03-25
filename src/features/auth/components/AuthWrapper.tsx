@@ -11,6 +11,8 @@ import {
 	CardTitle
 } from '@/shared/components/ui'
 
+import { AuthSocial } from './AuthSocial'
+
 interface AuthWrapperProps {
 	heading: string
 	description?: string
@@ -36,7 +38,7 @@ export function AuthWrapper({
 				)}
 			</CardHeader>
 			<CardContent>
-				{isShowSocial && <div>Social</div>}
+				{isShowSocial && <AuthSocial />}
 				{children}
 			</CardContent>
 			<CardFooter>

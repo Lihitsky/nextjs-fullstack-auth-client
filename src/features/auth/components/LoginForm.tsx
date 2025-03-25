@@ -14,31 +14,35 @@ import {
 	Input
 } from '@/shared/components/ui'
 
-import { RegisterSchema, TypeRegisterSchema } from '../schemas'
+import {
+	LoginSchema,
+	RegisterSchema,
+	TypeLoginSchema,
+	TypeRegisterSchema
+} from '../schemas'
 
 import { AuthWrapper } from './AuthWrapper'
 
-export function RegisterForm() {
-	const form = useForm<TypeRegisterSchema>({
-		resolver: zodResolver(RegisterSchema),
+export function LoginForm() {
+	const form = useForm<TypeLoginSchema>({
+		resolver: zodResolver(LoginSchema),
 		defaultValues: {
 			name: '',
 			email: '',
-			password: '',
-			passwordRepeat: ''
+			password: ''
 		}
 	})
 
-	const onSubmit = (data: TypeRegisterSchema) => {
+	const onSubmit = (data: TypeLoginSchema) => {
 		console.log(data)
 	}
 
 	return (
 		<AuthWrapper
-			heading='Registration'
+			heading='Login'
 			description='To sing in enter your email and password.'
-			backBattonLabel='Already have an account? Sign in'
-			backBattonHref='/auth/login'
+			backBattonLabel='Don’t have an account? Sign up'
+			backBattonHref='/auth/register'
 			isShowSocial
 		>
 			<Form {...form}>
@@ -93,24 +97,8 @@ export function RegisterForm() {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name='passwordRepeat'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Repeat password</FormLabel>
-								<FormControl>
-									<Input
-										placeholder='******'
-										type='password'
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<Button type='submit'>Create account</Button>
+
+					<Button type='submit'>Sign in</Button>
 				</form>
 			</Form>
 		</AuthWrapper>
