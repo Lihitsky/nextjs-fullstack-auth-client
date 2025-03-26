@@ -1,8 +1,11 @@
+import { useRouter } from 'next/navigation'
 import { FaGoogle } from 'react-icons/fa'
 
 import { Button } from '@/shared/components/ui'
 
 export function AuthSocial() {
+	const router = useRouter()
+
 	return (
 		<>
 			<div className='py-2'>

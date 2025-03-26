@@ -1,1 +1,1 @@
-export * "./user.types"
+export * from './user.types'

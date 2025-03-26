@@ -18,6 +18,7 @@ import {
 	Input
 } from '@/shared/components/ui'
 
+import { useLoginMutation } from '../hooks'
 import { LoginSchema, TypeLoginSchema } from '../schemas'
 
 import { AuthWrapper } from './AuthWrapper'
@@ -25,11 +26,11 @@ import { AuthWrapper } from './AuthWrapper'
 export function LoginForm() {
 	const { theme } = useTheme()
 	const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
+	const { login, isLoadingLogin } = useLoginMutation()
 
 	const form = useForm<TypeLoginSchema>({
 		resolver: zodResolver(LoginSchema),
 		defaultValues: {
-			name: '',
 			email: '',
 			password: ''
 		}
@@ -37,7 +38,7 @@ export function LoginForm() {
 
 	const onSubmit = (data: TypeLoginSchema) => {
 		if (recaptchaValue) {
-			console.log(data)
+			login({ values: data, recaptcha: recaptchaValue })
 		} else {
 			toast.error('Please confirm that you are not a robot.')
 		}
@@ -58,19 +59,6 @@ export function LoginForm() {
 				>
 					<FormField
 						control={form.control}
-						name='name'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Name</FormLabel>
-								<FormControl>
-									<Input placeholder='John Doe' {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
 						name='email'
 						render={({ field }) => (
 							<FormItem>
@@ -78,6 +66,7 @@ export function LoginForm() {
 								<FormControl>
 									<Input
 										placeholder='john@example.com'
+										disabled={isLoadingLogin}
 										type='email'
 										{...field}
 									/>
@@ -96,6 +85,7 @@ export function LoginForm() {
 									<Input
 										placeholder='******'
 										type='password'
+										disabled={isLoadingLogin}
 										{...field}
 									/>
 								</FormControl>
@@ -112,7 +102,9 @@ export function LoginForm() {
 							theme={theme === 'light' ? 'light' : 'dark'}
 						/>
 					</div>
-					<Button type='submit'>Sign in</Button>
+					<Button type='submit' disabled={isLoadingLogin}>
+						Sign in
+					</Button>
 				</form>
 			</Form>
 		</AuthWrapper>
