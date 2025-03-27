@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTheme } from 'next-themes'
-import Link from 'next/link'
 import { useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { useForm } from 'react-hook-form'
@@ -19,27 +18,30 @@ import {
 	Input
 } from '@/shared/components/ui'
 
-import { useLoginMutation } from '../hooks'
-import { LoginSchema, TypeLoginSchema } from '../schemas'
+import { usePasswordResetMutation } from '../hooks'
+import {
+	LoginSchema,
+	PasswordResetSchema,
+	TypePasswordResetSchema
+} from '../schemas'
 
 import { AuthWrapper } from './AuthWrapper'
 
-export function LoginForm() {
+export function ResetPasswordForm() {
 	const { theme } = useTheme()
 	const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null)
-	const { login, isLoadingLogin } = useLoginMutation()
+	const { reset, isLoadingReset } = usePasswordResetMutation()
 
-	const form = useForm<TypeLoginSchema>({
-		resolver: zodResolver(LoginSchema),
+	const form = useForm<TypePasswordResetSchema>({
+		resolver: zodResolver(PasswordResetSchema),
 		defaultValues: {
-			email: '',
-			password: ''
+			email: ''
 		}
 	})
 
-	const onSubmit = (data: TypeLoginSchema) => {
+	const onSubmit = (data: TypePasswordResetSchema) => {
 		if (recaptchaValue) {
-			login({ values: data, recaptcha: recaptchaValue })
+			reset({ values: data, recaptcha: recaptchaValue })
 		} else {
 			toast.error('Please confirm that you are not a robot.')
 		}
@@ -47,11 +49,10 @@ export function LoginForm() {
 
 	return (
 		<AuthWrapper
-			heading='Login'
-			description='To sing in enter your email and password.'
-			backBattonLabel='Don’t have an account? Sign up'
-			backBattonHref='/auth/register'
-			isShowSocial
+			heading='Password reset'
+			description='Enter your email address and we will send you a link to reset your password.'
+			backBattonLabel='Back to login'
+			backBattonHref='/auth/login'
 		>
 			<Form {...form}>
 				<form
@@ -67,7 +68,7 @@ export function LoginForm() {
 								<FormControl>
 									<Input
 										placeholder='john@example.com'
-										disabled={isLoadingLogin}
+										disabled={isLoadingReset}
 										type='email'
 										{...field}
 									/>
@@ -76,32 +77,7 @@ export function LoginForm() {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name='password'
-						render={({ field }) => (
-							<FormItem>
-								<div className='flex items-center justify-between'>
-									<FormLabel>Password</FormLabel>
-									<Link
-										href='/auth/reset-password'
-										className='text-sm underline-offset-4 hover:underline'
-									>
-										Forgot password?
-									</Link>
-								</div>
-								<FormControl>
-									<Input
-										placeholder='******'
-										type='password'
-										disabled={isLoadingLogin}
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+
 					<div className='flex justify-center'>
 						<ReCAPTCHA
 							sitekey={
@@ -111,8 +87,8 @@ export function LoginForm() {
 							theme={theme === 'light' ? 'light' : 'dark'}
 						/>
 					</div>
-					<Button type='submit' disabled={isLoadingLogin}>
-						Sign in
+					<Button type='submit' disabled={isLoadingReset}>
+						Reset Password
 					</Button>
 				</form>
 			</Form>

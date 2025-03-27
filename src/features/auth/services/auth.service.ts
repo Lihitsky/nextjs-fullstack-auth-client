@@ -24,6 +24,14 @@ class AuthService {
 		return response
 	}
 
+	public async oauthByProvider(provider: 'google') {
+		const response = await api.get<{ url: string }>(
+			`auth/oauth/connect/${provider}`
+		)
+
+		return response
+	}
+
 	public async logout() {
 		const response = await api.post('auth/logout')
 
