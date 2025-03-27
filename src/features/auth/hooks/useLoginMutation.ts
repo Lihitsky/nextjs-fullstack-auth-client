@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import { Dispatch, SetStateAction } from 'react'
 import { toast } from 'sonner'
 
 import { toastMessageHandler } from '@/shared/utils'
@@ -7,7 +8,9 @@ import { toastMessageHandler } from '@/shared/utils'
 import { TypeLoginSchema } from '../schemas'
 import { authService } from '../services'
 
-export function useLoginMutation() {
+export function useLoginMutation(
+	setIsShowTwoFactor: Dispatch<SetStateAction<boolean>>
+) {
 	const router = useRouter()
 
 	const { mutate: login, isPending: isLoadingLogin } = useMutation({
@@ -22,6 +25,7 @@ export function useLoginMutation() {
 		onSuccess(data: any) {
 			if (data.message) {
 				toastMessageHandler(data)
+				setIsShowTwoFactor(true)
 			} else {
 				toast.success('Authorization successful')
 				router.push('/dashboard/settings')

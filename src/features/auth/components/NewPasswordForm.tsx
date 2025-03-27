@@ -1,3 +1,5 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
