@@ -1,7 +1,12 @@
+import { Metadata } from 'next'
+
+import { SettingsForm } from '@/features/user/components'
+
+export const metadata: Metadata = {
+	title: 'Profile Settings',
+	description: 'Profile Settings to access the application.'
+}
+
 export default function SettingsPage() {
-	return (
-		<div className='space-y-5 text-center'>
-			<h1 className='text-4xl font-bold'>Settings page</h1>
-		</div>
-	)
+	return <SettingsForm />
 }
